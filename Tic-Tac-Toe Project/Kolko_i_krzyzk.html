@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kółko i krzyżyk</title>
+    <link rel="stylesheet" href="styl.css">
+
+
+</head>
+<body>
+    <audio autoplay loop>
+        <source src="LoFi 3 Min Countdown - Chill Sunset.mp3" type="audio/mp3">
+        <!-- Dodaj więcej źródeł audio, jeśli potrzebujesz obsługi różnych formatów -->
+        Twoja przeglądarka nie obsługuje elementu audio.
+      </audio>
+    
+    
+<div id="all">
+        <div id="banner">
+            <div id="banner_bg"></div>
+            <img src="napistictactoe.png" alt="napis tic tac toe" id="banner_zdjecie">
+        </div>
+
+        <div id="main">
+            <div id="main_bg"></div>
+
+            <div id="bloki">
+                <div onclick="zmien_zdjecie(this,'1')" id="div1" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                <div onclick="zmien_zdjecie(this,'2')" id="div2" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                <div onclick="zmien_zdjecie(this,'3')" id="div3" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                <div onclick="zmien_zdjecie(this,'4')" id="div4" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                <div onclick="zmien_zdjecie(this,'5')" id="div5" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                <div onclick="zmien_zdjecie(this,'6')" id="div6" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                <div onclick="zmien_zdjecie(this,'7')" id="div7" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                <div onclick="zmien_zdjecie(this,'8')" id="div8" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                <div onclick="zmien_zdjecie(this,'9')" id="div9" class="divy"><div class="div_bg"></div><img src="auto.gif" class="imgPole" alt="auto"></div>
+                
+            </div>
+
+            <div id="menu">
+                <img src="wybierz gracza.png" alt="Napis wybierz gracza" id="napis_wybierz_gracza" width="792px" height="90px"><br>
+                <button id="kolko_przycisk" onclick="ktory_gracz('O')"><img src="o.png" alt="kolko" width="100px" height="100px"></button>
+                <button id="reset_przycisk" onclick="ktory_gracz('reset')" onclick="reset()"><img src="reset.png" alt="kolko" height="100px"></button>
+                <button id="krzyzk_przycisk" onclick="ktory_gracz('x')"><img src="x.png" alt="krzyzyk" width="100px" height="100px"></button>
+            </div>
+        </div>
+</div>
+    
+<script>
+    var czy_gra_skonczona = false
+    var wybrany_gracz = null
+    var numer = 0
+    var gra_zakonczona = false
+    ilosc_kliniec_do_remisu = 9
+    function ktory_gracz(gracz){
+        if (!gra_zakonczona) {
+            wybrany_gracz = gracz;
+
+            if (wybrany_gracz == 'O'){
+                numer = 1
+                document.getElementById("napis_wybierz_gracza").src = "ruch gracza o.png";
+                console.log("Wybrano" + numer)
+                document.getElementById('kolko_przycisk').disabled = true
+                document.getElementById('krzyzk_przycisk').disabled = true
+
+                document.getElementById('kolko_przycisk').style.visibility = 'hidden';
+                document.getElementById('krzyzk_przycisk').style.visibility = 'hidden';
+            }
+
+            if (wybrany_gracz == 'x'){
+                numer = 2
+                document.getElementById("napis_wybierz_gracza").src = "ruch gracza x.png"
+                console.log("Wybrano" + numer)
+                document.getElementById('kolko_przycisk').disabled = true
+                document.getElementById('krzyzk_przycisk').disabled = true
+
+                document.getElementById('kolko_przycisk').style.visibility = 'hidden';
+                document.getElementById('krzyzk_przycisk').style.visibility = 'hidden';
+
+    
+            }
+
+            if (wybrany_gracz == 'reset'){
+                numer = 3
+                console.log("Wybrano" + numer)
+                document.getElementById('kolko_przycisk').disabled = false
+                document.getElementById('krzyzk_przycisk').disabled = false
+
+                document.getElementById('kolko_przycisk').style.visibility = 'visible';
+                document.getElementById('krzyzk_przycisk').style.visibility = 'visible';
+                numer = 0
+
+                reset();
+
+            }
+            
+        } else{
+            alert("Gra została zakończona. Aby rozpocząć nową, kliknij Reset.")
+        }
+
+    }
+    // FUNKCJA RESET
+function reset(){
+    console.log("Resetuje wszystkie obrazki");
+    ilosc_kliniec_do_remisu = 9;
+
+    // Ustaw wszystkie img na auto.gif z animacją fadeOut i fadeIn
+    $(".imgPole").fadeOut(600, function() {
+        // Po zakończeniu animacji dla wszystkich obrazków, zmień src na auto.gif i wykonaj fadeIn
+        $(".imgPole").attr("src", "auto.gif").fadeIn(600);
+    });
+
+    // Przywróć obsługę kliknięć dla pól divy
+    console.log("włączyłęm obsługę po resecie");
+    var divy = document.getElementsByClassName("divy");
+    for (var i = 0; i < divy.length; i++) {
+        divy[i].setAttribute("onclick", "zmien_zdjecie(this, '" + (i + 1) + "')");
+    }
+
+    document.getElementById('banner_zdjecie').src = "napistictactoe.png";
+    document.getElementById("napis_wybierz_gracza").src = "wybierz gracza.png";
+}
+
+//FUNKCJA ZMIANY OBRAZKA
+
+function zmien_zdjecie(div, x){
+    if (numer !== 0) {
+        var obrazek = div.querySelector('img'); // znajdź obrazek wewnątrz danego diva
+        if(obrazek && obrazek.getAttribute('src') === 'auto.gif'){
+
+            
+
+            // Animacja zanikania auto.gif
+            obrazek.style.transition = "opacity 0.2s";
+            obrazek.style.opacity = "0";
+
+            // Wyłącz obsługę kliknięć dla wszystkich pól divy
+            var divy = document.getElementsByClassName("divy");
+                for (var i = 0; i < divy.length; i++) {
+                    divy[i].setAttribute("onclick", null);
+                }
+
+            // Wykonaj odpowiednią akcję po zaniku auto.gif
+            setTimeout(function() {
+                if (numer == 1) {
+                    
+                    
+                    // Animacja wyświetlania o.png
+                    obrazek.src = "o.png";
+                    document.getElementById("napis_wybierz_gracza").src = "ruch gracza x.png"; 
+                    console.log("Wstawiono numer " + numer + " dla diva nr. " + x);
+                    numer = 2;
+                    sprawdz_czy_wygrana();
+                    
+                    if(czy_gra_skonczona == false){
+                        ilosc_kliniec_do_remisu = ilosc_kliniec_do_remisu - 1;
+                        console.log("remis za: " + ilosc_kliniec_do_remisu + " kliknięć")
+                        
+                        if (ilosc_kliniec_do_remisu == 0){
+                            document.getElementById('banner_zdjecie').src = "remis.png";
+                            document.getElementById("napis_wybierz_gracza").src = "koniec.png";
+                        }
+                    }
+
+
+                    obrazek.style.transition = "opacity 0.1s";
+                    obrazek.style.opacity = "1";
+                    
+                   
+
+                } else if (numer == 2) {
+                    
+
+                    // Animacja wyświetlania x.png
+                    obrazek.src = "x.png";
+                    document.getElementById("napis_wybierz_gracza").src = "ruch gracza o.png"; 
+                    console.log("Wstawiono numer " + numer + " dla diva nr. " + x);
+                    numer = 1;
+                    sprawdz_czy_wygrana();
+
+                    if(czy_gra_skonczona == false){
+                        ilosc_kliniec_do_remisu = ilosc_kliniec_do_remisu - 1
+                        console.log("remis za: " + ilosc_kliniec_do_remisu+ " kliknięć")
+                        
+                        
+                    }
+
+                    obrazek.style.transition = "opacity 0.1s";
+                    obrazek.style.opacity = "1";
+
+                   
+                }
+                    console.log(czy_gra_skonczona)
+                    if(czy_gra_skonczona == false){
+                   // Przywróć obsługę kliknięć dla wszystkich pól divy po zakończeniu animacji
+                   
+                   for (var i = 0; i < divy.length; i++) {
+                        divy[i].setAttribute("onclick", "zmien_zdjecie(this, '" + (i + 1) + "')");
+                    }
+                    }
+
+
+            }, 200);
+        }
+    } else {
+        alert("Proszę wybrać gracza !");
+        console.log("Numer jest równy 0. Nie można zmieniać obrazków.");
+    }
+
+    //REMIS
+   
+        
+    
+}
+
+function sprawdz_czy_wygrana() {
+    var divy = document.getElementsByClassName("divy");
+    var obrazki = [];
+
+    // Pobierz źródła obrazków z elementów div
+    for (var i = 0; i < divy.length; i++) {
+        var img = divy[i].querySelector('img');
+        obrazki.push(img.src);
+    }
+
+    // Funkcja pomocnicza do pobrania końcówki URL obrazka (albo "o" albo "x")
+    function wez_nazwe_pliku(url) {
+        return url.substring(url.lastIndexOf('/') + 1);
+    }
+
+    // Sprawdź czy istnieje wygrana
+    if (
+        (wez_nazwe_pliku(obrazki[0]) === wez_nazwe_pliku(obrazki[1]) && wez_nazwe_pliku(obrazki[1]) === wez_nazwe_pliku(obrazki[2]) && wez_nazwe_pliku(obrazki[0]) !== 'auto.gif') || // Pierwszy rząd
+        (wez_nazwe_pliku(obrazki[3]) === wez_nazwe_pliku(obrazki[4]) && wez_nazwe_pliku(obrazki[4]) === wez_nazwe_pliku(obrazki[5]) && wez_nazwe_pliku(obrazki[3]) !== 'auto.gif') || // Drugi rząd
+        (wez_nazwe_pliku(obrazki[6]) === wez_nazwe_pliku(obrazki[7]) && wez_nazwe_pliku(obrazki[7]) === wez_nazwe_pliku(obrazki[8]) && wez_nazwe_pliku(obrazki[6]) !== 'auto.gif') || // Trzeci rząd
+        (wez_nazwe_pliku(obrazki[0]) === wez_nazwe_pliku(obrazki[3]) && wez_nazwe_pliku(obrazki[3]) === wez_nazwe_pliku(obrazki[6]) && wez_nazwe_pliku(obrazki[0]) !== 'auto.gif') || // Pierwsza kolumna
+        (wez_nazwe_pliku(obrazki[1]) === wez_nazwe_pliku(obrazki[4]) && wez_nazwe_pliku(obrazki[4]) === wez_nazwe_pliku(obrazki[7]) && wez_nazwe_pliku(obrazki[1]) !== 'auto.gif') || // Druga kolumna
+        (wez_nazwe_pliku(obrazki[2]) === wez_nazwe_pliku(obrazki[5]) && wez_nazwe_pliku(obrazki[5]) === wez_nazwe_pliku(obrazki[8]) && wez_nazwe_pliku(obrazki[2]) !== 'auto.gif') || // Trzecia kolumna
+        (wez_nazwe_pliku(obrazki[0]) === wez_nazwe_pliku(obrazki[4]) && wez_nazwe_pliku(obrazki[4]) === wez_nazwe_pliku(obrazki[8]) && wez_nazwe_pliku(obrazki[0]) !== 'auto.gif') || // Przekątna od lewej do prawej
+        (wez_nazwe_pliku(obrazki[2]) === wez_nazwe_pliku(obrazki[4]) && wez_nazwe_pliku(obrazki[4]) === wez_nazwe_pliku(obrazki[6]) && wez_nazwe_pliku(obrazki[2]) !== 'auto.gif') // Przekątna od prawej do lewej
+    ) {
+        //flaga dla funkcji zmien_zdjecie (żeby remis nie odpalał sie po wygranej)
+        console.log("Znalazłem koniec gry. Zmieniam flage na true")
+        czy_gra_skonczona = true
+        console.log(czy_gra_skonczona)
+
+        if (numer == 1) {
+            // Animacja dla banner_zdjecie
+            $("#banner_zdjecie").fadeOut(600, function() {
+                $(this).attr("src", "wygrywax.png").fadeIn(600);
+            });
+
+            // Animacja dla napis_wybierz_gracza
+            $("#napis_wybierz_gracza").fadeOut(600, function() {
+                $(this).attr("src", "koniec.png").fadeIn(600);
+            });
+        } else {
+            // Animacja dla banner_zdjecie
+            $("#banner_zdjecie").fadeOut(600, function() {
+                $(this).attr("src", "wygrywao.png").fadeIn(600);
+            });
+
+            // Animacja dla napis_wybierz_gracza
+            $("#napis_wybierz_gracza").fadeOut(600, function() {
+                $(this).attr("src", "koniec.png").fadeIn(600);
+            });
+        }
+
+        // Wyłącz obsługę kliknięć dla pól divy
+        console.log("Wyłączam obsługę po znalezieniu wygranej")
+        var divy = document.getElementsByClassName("divy");
+        for (var i = 0; i < divy.length; i++) {
+            console.log("wyłączyłem: " + i)
+            divy[i].setAttribute("onclick", null);
+        }
+    } else {
+        czy_gra_skonczona = false
+    }
+}
+    
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</body>
+</html>
